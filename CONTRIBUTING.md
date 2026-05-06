@@ -5,8 +5,8 @@ Thanks for considering a contribution! This is a free, open-source revision plat
 ## Quick start
 
 ```bash
-git clone https://github.com/shekolla/one-hour-prep.git
-cd one-hour-prep
+git clone https://github.com/shekolla/prepfast.git
+cd prepfast
 npm install
 npm run dev          # http://localhost:3000
 npm run typecheck    # tsc --noEmit

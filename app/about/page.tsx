@@ -72,16 +72,16 @@ export default function AboutPage() {
           The full source — including every concept, every interview pattern, every
           common-mistake entry — is on GitHub at{" "}
           <a
-            href="https://github.com/shekolla/one-hour-prep"
+            href="https://github.com/shekolla/prepfast"
             target="_blank"
             rel="noreferrer"
             className="text-indigo-400 hover:text-indigo-300"
           >
-            shekolla/one-hour-prep
+            shekolla/prepfast
           </a>
           . MIT licensed. PRs welcome — see{" "}
           <a
-            href="https://github.com/shekolla/one-hour-prep/blob/main/CONTRIBUTING.md"
+            href="https://github.com/shekolla/prepfast/blob/main/CONTRIBUTING.md"
             target="_blank"
             rel="noreferrer"
             className="text-indigo-400 hover:text-indigo-300"
@@ -96,7 +96,7 @@ export default function AboutPage() {
         <p>
           Best path: open an{" "}
           <a
-            href="https://github.com/shekolla/one-hour-prep/issues"
+            href="https://github.com/shekolla/prepfast/issues"
             target="_blank"
             rel="noreferrer"
             className="text-indigo-400 hover:text-indigo-300"

@@ -303,7 +303,7 @@ export default function Home() {
           <p className="text-gray-500 text-sm">Stop reading docs. Start recalling.</p>
           <div className="mt-6 flex flex-col items-center gap-3">
             <a
-              href="https://github.com/shekolla/one-hour-prep"
+              href="https://github.com/shekolla/prepfast"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"

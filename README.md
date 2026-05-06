@@ -1,6 +1,6 @@
 # InterviewPrep
 
-[![CI](https://github.com/shekolla/one-hour-prep/actions/workflows/ci.yml/badge.svg)](https://github.com/shekolla/one-hour-prep/actions/workflows/ci.yml)
+[![CI](https://github.com/shekolla/prepfast/actions/workflows/ci.yml/badge.svg)](https://github.com/shekolla/prepfast/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 > Revise any tech topic in under 1 hour. High-signal content for mid to senior engineers.

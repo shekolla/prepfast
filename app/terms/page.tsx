@@ -35,7 +35,7 @@ export default function TermsPage() {
         <p>
           Source code is licensed under MIT (see{" "}
           <a
-            href="https://github.com/shekolla/one-hour-prep/blob/main/LICENSE"
+            href="https://github.com/shekolla/prepfast/blob/main/LICENSE"
             target="_blank"
             rel="noreferrer"
             className="text-indigo-400 hover:text-indigo-300"
@@ -69,7 +69,7 @@ export default function TermsPage() {
           By contributing to the project (PR, issue, discussion), you agree your
           contribution is licensed under the same MIT license. See{" "}
           <a
-            href="https://github.com/shekolla/one-hour-prep/blob/main/CONTRIBUTING.md"
+            href="https://github.com/shekolla/prepfast/blob/main/CONTRIBUTING.md"
             target="_blank"
             rel="noreferrer"
             className="text-indigo-400 hover:text-indigo-300"
