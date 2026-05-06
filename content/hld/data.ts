@@ -277,6 +277,14 @@ const concepts: Concept[] = [
       "Treating EDA as a solution to all coupling problems. Event-driven choreography at scale becomes 'event spaghetti' — it is hard to trace the causal chain of a business process across 10 event types. For complex multi-step workflows, orchestration (Temporal, Step Functions) provides explicit process visibility at the cost of a central coordinator.",
     memoryAnchor:
       "EDA = a town crier shouting news in the square. Anyone who cares listens; the crier doesn't know or care who's in the crowd.",
+    diagram: `flowchart LR
+  P[Order service] -- publish OrderPlaced --> B[(Event broker<br/>Kafka)]
+  B --> C1[Inventory svc]
+  B --> C2[Billing svc]
+  B --> C3[Notification svc]
+  B --> C4[Analytics svc]
+  C1 --> DLQ1[(DLQ on poison msg)]`,
+    diagramCaption: "Producer is decoupled from consumers. New consumers subscribe without producer changes. Each consumer owns its own offset and DLQ.",
   },
   {
     id: "cqrs",
@@ -328,6 +336,19 @@ const concepts: Concept[] = [
       "Trying to implement sagas without compensating transactions. You cannot simply 'roll back' a distributed transaction — the inventory service already decremented its count. Compensating transactions are domain operations (re-increment inventory) not technical rollbacks.",
     memoryAnchor:
       "Saga = planning a wedding across multiple vendors. If the caterer cancels, you can't 'undo' the cake tasting — you call each vendor to cancel and get refunds one by one.",
+    diagram: `sequenceDiagram
+  participant O as Orchestrator
+  participant Pay as Payment
+  participant Inv as Inventory
+  participant Ship as Shipping
+  O->>Pay: charge card
+  Pay-->>O: ok
+  O->>Inv: reserve item
+  Inv-->>O: FAILED out of stock
+  Note over O: trigger compensation
+  O->>Pay: refund (compensating tx)
+  Pay-->>O: refunded`,
+    diagramCaption: "Orchestrated saga: each step is a local transaction. On failure, the orchestrator runs compensating transactions in reverse — no global rollback exists.",
   },
 
   // ── Service Design ─────────────────────────────────────────────────────────
@@ -468,6 +489,21 @@ const concepts: Concept[] = [
       "Polling the outbox table with a background thread inside the application process. This works but introduces ordering issues (multiple application instances can publish out of order) and doesn't survive a JVM crash mid-publish. CDC via Debezium is the correct approach.",
     memoryAnchor:
       "Outbox pattern = writing a sticky note and dropping it in an 'outgoing mail' tray in the same motion as filing your paperwork. A mail carrier picks it up later — you never walk to the post office yourself.",
+    diagram: `sequenceDiagram
+  participant App
+  participant DB
+  participant CDC as Debezium / WAL relay
+  participant K as Kafka
+  App->>DB: BEGIN
+  App->>DB: INSERT order
+  App->>DB: INSERT outbox event
+  App->>DB: COMMIT (atomic)
+  CDC->>DB: tail WAL
+  DB-->>CDC: outbox row
+  CDC->>K: publish event
+  K-->>CDC: ack
+  Note over App,K: App never calls Kafka in request path — no dual-write race`,
+    diagramCaption: "DB is the single source of truth. Outbox row + domain row commit atomically. CDC relay publishes to broker after commit — exactly the contract you want.",
   },
   {
     id: "idempotency-keys",

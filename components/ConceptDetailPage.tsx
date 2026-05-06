@@ -12,6 +12,7 @@ import StructuredData, {
   breadcrumbSchema,
   qaSchema,
 } from "@/components/StructuredData";
+import ConceptDiagram from "@/components/ConceptDiagram";
 
 interface Props {
   slug: string;
@@ -118,6 +119,13 @@ export default function ConceptDetailPage({ slug, conceptId }: Props) {
                 {concept.basic}
               </p>
             </header>
+
+            {/* Diagram — visual reinforcement, only when concept ships one */}
+            {concept.diagram && (
+              <section className="mb-8">
+                <ConceptDiagram source={concept.diagram} caption={concept.diagramCaption} />
+              </section>
+            )}
 
             {/* Memory anchor */}
             {concept.memoryAnchor && (

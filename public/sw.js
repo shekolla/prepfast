@@ -1,6 +1,6 @@
 // InterviewPrep service worker — minimal cache-first strategy for offline use.
 // Bumping CACHE_NAME forces all clients to re-fetch on next visit.
-const CACHE_NAME = "prepfast-v1";
+const CACHE_NAME = "prepfast-v2";
 
 const CORE_ASSETS = [
   "/",

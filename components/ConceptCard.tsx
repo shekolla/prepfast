@@ -1,9 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Concept, DepthLevel } from "@/content/types";
+
+const ConceptDiagram = dynamic(() => import("./ConceptDiagram"), {
+  ssr: false,
+  loading: () => (
+    <div className="my-4 h-32 rounded-xl border border-gray-800 bg-gray-950/60 grid place-items-center text-gray-500 text-xs">
+      Loading diagram…
+    </div>
+  ),
+});
 
 const depthConfig = {
   basic: { label: "Basic", dot: "bg-green-500", text: "text-green-400", border: "border-green-500/30", bg: "bg-green-500/5" },
@@ -94,6 +104,11 @@ export default function ConceptCard({ concept, activeDepth, showTraps, showAncho
           );
         })}
       </div>
+
+      {/* Diagram — only renders for concepts that ship one */}
+      {concept.diagram && (
+        <ConceptDiagram source={concept.diagram} caption={concept.diagramCaption} />
+      )}
 
       {/* Memory Anchor — shown when Anchors toggle is on */}
       {showAnchors && concept.memoryAnchor && (

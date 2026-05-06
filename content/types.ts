@@ -21,6 +21,10 @@ export interface Concept {
   interviewAnswer: string;
   trap: string;
   memoryAnchor?: string;
+  /** Optional Mermaid diagram source rendered client-side. Use for HLD/system-design topology. */
+  diagram?: string;
+  /** Optional one-line caption rendered under the diagram. */
+  diagramCaption?: string;
 }
 
 export interface CategoryMeta {

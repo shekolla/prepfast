@@ -259,6 +259,19 @@ const concepts: Concept[] = [
     interviewAnswer: "I'd use consistent hashing with virtual nodes for most sharded systems. The shard key choice is critical — I'd pick a high-cardinality key that distributes writes evenly and avoids hot spots. For a social network, I'd shard users by user_id hash; for multi-tenant SaaS, by tenant_id. I'd plan for resharding from day one by using logical shards (e.g., 1024 virtual shards mapped to N physical nodes), so scaling out means remapping virtual shards, not rehashing all data.",
     trap: "Sharding by a monotonically increasing key (auto-increment ID, timestamp) causes all new writes to hit the same shard — the 'hot partition' problem. Always analyze write patterns before choosing a shard key.",
     memoryAnchor: "SHARDing = SHARing the Dish. You slice a pizza into pieces so multiple people eat simultaneously. Consistent hashing = a lazy Susan -- spin the table, each guest grabs the slice nearest to them.",
+    diagram: `flowchart LR
+  C[Client<br/>write key=u123] --> H{hash key mod ring}
+  H -->|0-1023| A[Shard A]
+  H -->|1024-2047| B[Shard B]
+  H -->|2048-3071| D[Shard C]
+  H -->|3072-4095| E[Shard D]
+  subgraph virtual nodes
+    A
+    B
+    D
+    E
+  end`,
+    diagramCaption: "Consistent hashing with virtual nodes — adding a shard remaps only ~1/N of the keyspace.",
   },
   {
     id: "auto-scaling",
@@ -294,6 +307,14 @@ const concepts: Concept[] = [
     interviewAnswer: "I'd add read replicas as the first scaling step for read-heavy workloads. I'd explicitly handle replica lag: route reads requiring freshness (e.g., immediately after a write) to the primary using a read-your-writes routing layer. I'd monitor replication lag with alerts at 1s and circuit-break at 10s. For cross-region reads, I'd accept eventual consistency and design the UI to reflect that (e.g., 'feed may take a moment to update').",
     trap: "Routing all reads to replicas including reads that follow a write. This causes read-your-own-writes failures where a user creates an item and immediately doesn't see it. Maintain a primary-read window post-write or use session consistency routing.",
     memoryAnchor: "Read replicas = photocopies of the boss's notebook. They're slightly outdated, but 100 interns can read copies simultaneously instead of lining up at the boss's desk.",
+    diagram: `flowchart LR
+  W[Writes] --> P[(Primary)]
+  P -- WAL stream --> R1[(Replica 1)]
+  P -- WAL stream --> R2[(Replica 2)]
+  R1 --> RD[Stale-tolerant reads]
+  R2 --> RD
+  P --> RYW[Read-your-writes<br/>routed to primary]`,
+    diagramCaption: "Async replication: replicas lag the primary; freshness-sensitive reads bypass the lag by hitting the primary.",
   },
   {
     id: "indexes",
@@ -340,6 +361,21 @@ const concepts: Concept[] = [
     interviewAnswer: "My default is cache-aside with explicit invalidation. On any write, I update the DB first, then delete the cache key (not update it). Deletion is safer than update because it avoids race conditions. I use TTL as a safety net, not the primary invalidation mechanism. For write-heavy paths where DB write latency is the bottleneck, write-behind with a durable queue (Kafka) between cache and DB gives me fast writes with eventual DB consistency — acceptable for non-critical data.",
     trap: "Updating the cache after a DB write instead of deleting it. A concurrent reader may be about to write a stale value to the cache at the same moment, causing the fresh value to be immediately overwritten. Delete forces a clean miss; update creates a race window.",
     memoryAnchor: "Cache-aside = checking your sticky note before calling the office. Write-through = updating the sticky note AND the master file at once. Write-behind = scribbling a note now and filing it later (hope the sticky doesn't fall off).",
+    diagram: `sequenceDiagram
+  participant App
+  participant Cache
+  participant DB
+  App->>Cache: GET key
+  alt cache hit
+    Cache-->>App: value
+  else cache miss
+    Cache-->>App: nil
+    App->>DB: SELECT
+    DB-->>App: row
+    App->>Cache: SET key value TTL
+  end
+  Note over App,DB: On write: UPDATE DB then DELETE cache key`,
+    diagramCaption: "Cache-aside read path. Writes invalidate (delete) rather than update — avoids race where a slow cache write overwrites a fresh value.",
   },
   {
     id: "eviction-policies",
@@ -373,6 +409,18 @@ const concepts: Concept[] = [
     interviewAnswer: "For any system with static assets, CDN is the highest-ROI optimization — it eliminates origin load for assets that represent 80%+ of bytes transferred. I'd set long Cache-Control max-age (1 year) for fingerprinted assets (content-addressed filenames) and short TTLs (5–60s) for HTML. I'd use origin shield to prevent CDN edge nodes from stampeding the origin on a miss. For API responses, I'd use CDN caching for public, non-personalized endpoints with appropriate Surrogate-Control headers.",
     trap: "Relying on CDN caching for authenticated or personalized content without cache key customization. Without a user-specific cache key, one user's data is served to another. Use Cache-Control: private for personalized content, or use a CDN that supports custom cache keys.",
     memoryAnchor: "CDN = vending machines placed in every neighborhood instead of making everyone drive to the factory. Same snacks, way closer. Origin shield = one regional warehouse between the vending machines and the factory.",
+    diagram: `flowchart LR
+  U1[User EU] --> E1[Edge POP EU]
+  U2[User US] --> E2[Edge POP US]
+  U3[User APAC] --> E3[Edge POP APAC]
+  E1 -- miss --> S[Origin shield]
+  E2 -- miss --> S
+  E3 -- miss --> S
+  S -- miss --> O[(Origin)]
+  E1 -- hit --> U1
+  E2 -- hit --> U2
+  E3 -- hit --> U3`,
+    diagramCaption: "Edge POPs serve hits locally. Origin shield collapses fan-in so origin sees one fetch per region per object, not one per edge.",
   },
   {
     id: "redis-vs-memcached",
@@ -443,6 +491,13 @@ const concepts: Concept[] = [
     interviewAnswer: "I'd present CAP not as a static global choice but as a per-operation tuning knob. For the payment confirmation path, I'd use strong consistency (QUORUM or ALL reads) because showing a stale balance is a business problem. For the activity feed, I'd use eventual consistency (ONE read) because 100ms of staleness is acceptable and latency matters more. I'd design the system so that the consistency level of each operation is a conscious decision documented in the API contract.",
     trap: "Treating CAP as a permanent architectural choice you make once. Modern distributed databases (Cassandra, DynamoDB) let you tune consistency per request. Design your system to use the weakest consistency level that meets the correctness requirement for each operation.",
     memoryAnchor: "CAP = planning a party with 3 friends: Consistent info, Available hosts, Partition-tolerant (works if some can't talk). The network WILL glitch (P is mandatory), so pick: does everyone get the same answer (C), or does everyone answer the phone (A)?",
+    diagram: `flowchart TB
+  N[Network partition occurs<br/>P is unavoidable] --> Q{Pick one}
+  Q -->|Reject writes,<br/>preserve consistency| CP[CP system<br/>Spanner, etcd, ZooKeeper]
+  Q -->|Accept writes,<br/>diverge replicas| AP[AP system<br/>Cassandra, Dynamo, Riak]
+  CP --> CPx[Some clients see errors<br/>until partition heals]
+  AP --> APx[All clients served,<br/>read-repair on heal]`,
+    diagramCaption: "Partition is mandatory in real networks. The choice is what to do during one: refuse writes (CP) or accept divergence (AP).",
   },
   {
     id: "eventual-vs-strong",
@@ -489,6 +544,15 @@ const concepts: Concept[] = [
     interviewAnswer: "For a typical web application, I'd use L7 load balancing (ALB or Nginx) at the edge for HTTP routing, TLS termination, and health checking. Behind it, I'd use L4 for any non-HTTP protocols. In a microservices architecture, I'd use a service mesh (Istio + Envoy) for internal service-to-service load balancing — it gives me circuit breaking, retries, and distributed tracing for free. For the cache tier, I'd configure the load balancer with consistent hashing to maximize cache hit rates.",
     trap: "Forgetting that L7 load balancers introduce additional latency and are themselves a single point of failure. Always run multiple load balancer instances behind a VIP (Virtual IP) with ECMP routing, and monitor load balancer CPU — they can saturate under TLS handshake load.",
     memoryAnchor: "L4 load balancer = a highway traffic cop waving cars to different lanes (fast, doesn't care what's inside). L7 = a hotel concierge reading your reservation to send you to the right floor (smarter, but takes a moment to read).",
+    diagram: `flowchart LR
+  C[Clients] --> L4[L4 LB<br/>TCP/UDP, port-only]
+  C --> L7[L7 LB<br/>HTTP-aware]
+  L4 --> POOL[Backend pool<br/>opaque payload]
+  L7 -- /api/* --> API[API svc]
+  L7 -- /static/* --> ST[Static svc]
+  L7 -- host=admin.* --> ADM[Admin svc]
+  L7 -- header tenant=X --> TEN[Tenant X svc]`,
+    diagramCaption: "L4 routes by 5-tuple, L7 routes by URL/header/host. L7 enables auth, rate limit, sticky sessions; L4 wins on raw throughput.",
   },
   {
     id: "tcp-vs-udp",
@@ -546,6 +610,16 @@ const concepts: Concept[] = [
     interviewAnswer: "I'd implement circuit breakers at every external service call boundary. I'd configure failure thresholds conservatively (80% error rate over 20 calls) to avoid false trips on bursty traffic. The fallback is critical — for product recommendations, I'd return a static 'trending items' list; for search, return the previous result. I'd pair circuit breakers with bulkheads: separate Hystrix thread pools (or semaphore limits) per downstream service so one failing dependency can't exhaust all threads.",
     trap: "Opening the circuit breaker too aggressively. If the threshold is 10% error rate over 5 requests, a temporary network blip opens the circuit and takes down a dependency unnecessarily. Tune thresholds based on baseline error rates from production metrics, not theoretical minimums.",
     memoryAnchor: "Circuit breaker = your home's electrical breaker panel. When a downstream appliance (service) short-circuits, the breaker TRIPS to protect the whole house. Half-open = cautiously flipping the switch back to test if the toaster stopped smoking.",
+    diagram: `stateDiagram-v2
+  [*] --> Closed
+  Closed --> Open: failure rate > threshold
+  Open --> HalfOpen: cooldown timer expires
+  HalfOpen --> Closed: probe succeeds
+  HalfOpen --> Open: probe fails
+  Closed: Closed<br/>traffic flows
+  Open: Open<br/>fail fast / fallback
+  HalfOpen: Half-Open<br/>let one probe through`,
+    diagramCaption: "Three states. Open trips on failure rate; Half-Open admits a single probe to test recovery before re-opening to traffic.",
   },
   {
     id: "rate-limiting",
