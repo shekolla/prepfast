@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+
+  <!-- Accent bar at top -->
+  <rect width="1200" height="4" fill="#6366f1"/>
+
+  <!-- Favicon icon -->
+  <rect x="80" y="200" width="56" height="56" rx="8" fill="#6366f1"/>
+  <circle cx="108" cy="217" r="4.5" fill="white"/>
+  <rect x="103" y="224" width="10" height="22" rx="2.5" fill="white"/>
+
+  <!-- Title -->
+  <text x="160" y="242" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="44" font-weight="700" fill="white">InterviewPrep</text>
+
+  <!-- Main headline -->
+  <text x="80" y="360" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="52" font-weight="700" fill="white">Revise any tech topic in under 1 hour.</text>
+
+  <!-- Subtitle -->
+  <text x="80" y="420" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="26" fill="#a1a1aa">14 Topics</text>
+  <circle cx="248" cy="414" r="3" fill="#6366f1"/>
+  <text x="264" y="420" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="26" fill="#a1a1aa">399 Concepts</text>
+  <circle cx="448" cy="414" r="3" fill="#6366f1"/>
+  <text x="464" y="420" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="26" fill="#a1a1aa">High-signal interview prep</text>
+
+  <!-- Bottom accent line -->
+  <rect x="80" y="480" width="120" height="4" rx="2" fill="#6366f1"/>
+</svg>

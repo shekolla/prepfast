@@ -1,0 +1,26 @@
+{
+  "name": "InterviewPrep — Revise any tech topic in under 1 hour",
+  "short_name": "InterviewPrep",
+  "description": "Free revision platform for mid-to-senior engineers. 14 topics, 399 concepts, depth levels, knowledge trees, Last 1 Hour mode.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#030712",
+  "theme_color": "#4f46e5",
+  "orientation": "any",
+  "categories": ["education", "productivity", "developer"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+html, body {
+  overflow-x: hidden;
+}
+
+/* Skip-to-content — visually hidden until focused. */
+.skip-to-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #4f46e5;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 0 0 0.5rem 0;
+  z-index: 100;
+  transform: translateY(-100%);
+  transition: transform 0.15s ease;
+}
+.skip-to-content:focus,
+.skip-to-content:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid #a5b4fc;
+  outline-offset: 2px;
+}
+
+/* Respect prefers-reduced-motion — disable transitions and animations. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Hide non-essential UI for printing */
+  nav,
+  button,
+  [data-print-hidden] {
+    display: none !important;
+  }
+
+  /* Make all dark backgrounds white for paper */
+  * {
+    background-color: white !important;
+    border-color: #ccc !important;
+  }
+
+  /* Make all text readable on paper */
+  h1, h2, h3, h4, h5, h6, p, span, li, td, th, pre, code, a, div {
+    color: black !important;
+  }
+
+  /* Ensure content fits on page */
+  .max-w-5xl,
+  .max-w-4xl {
+    max-width: 100% !important;
+  }
+}

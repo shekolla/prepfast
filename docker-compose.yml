@@ -1,0 +1,41 @@
+services:
+
+  # ── Development ─────────────────────────────────────────────────────────────
+  # Usage: docker compose up dev
+  # Hot reload, source mounted from host.
+  dev:
+    image: node:20-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+
+  # ── Production (static build + nginx) ───────────────────────────────────────
+  # Usage: docker compose up prod --build
+  # Builds static files and serves them via nginx on port 8080.
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: server
+    ports:
+      - "8080:80"
+
+  # ── Build only (export static files to ./out) ───────────────────────────────
+  # Usage: docker compose run --rm export
+  # Writes the static build to ./out on the host — deploy that folder anywhere.
+  export:
+    image: node:20-alpine
+    working_dir: /app
+    command: sh -c "npm ci && npm run build"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+
+volumes:
+  node_modules:
