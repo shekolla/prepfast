@@ -10,10 +10,9 @@
 - The version / commit you tested against
 - Any mitigation suggestions
 
-I'll acknowledge within 72 hours and aim to triage within a week. If the
-issue is confirmed:
+I'll acknowledge within 72 hours and triage within 7 days. Once confirmed:
 
-- **Critical / high:** patch released within 7 days, advisory published after the fix is tagged.
+- **Critical / high:** patch released within 7 days of confirmation, advisory published after the fix is tagged.
 - **Medium:** patched in the next release; advisory published with the release notes.
 - **Low (hardening, defense-in-depth):** rolled into the normal release cadence.
 
