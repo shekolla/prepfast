@@ -2,5 +2,14 @@ node_modules
 .next
 out
 .git
+coverage
+tests
+.github
+.claude
+*.log
+.env*
+docker-compose.yml
+vitest.config.ts
+codecov.yml
 *.md
 .dockerignore
