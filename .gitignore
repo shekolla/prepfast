@@ -37,3 +37,6 @@ next-env.d.ts
 # Docker
 .docker/
 .vercel
+
+# Test coverage
+coverage/
