@@ -1,0 +1,40 @@
+name: Feature request
+description: Propose a new feature or improvement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read [CONTRIBUTING.md](../CONTRIBUTING.md) first — prepfast is opinionated about scope. The bar is "would this help engineers revise faster?"
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What's missing or hard today? Skip if this is a greenfield idea.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: What would the feature look like?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches, workarounds, or simpler solutions you ruled out.
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: I've read CONTRIBUTING.md
+          required: true
+        - label: This works without a backend, database, or user authentication
+          required: true

@@ -1,0 +1,62 @@
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+          - ".github/dependabot.yml"
+          - ".github/labeler.yml"
+          - ".github/release-drafter.yml"
+
+content:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "content/**"
+
+components:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "components/**"
+
+app:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "app/**"
+
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "tests/**"
+          - "**/*.test.ts"
+          - "**/*.spec.ts"
+          - "vitest.config.ts"
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "*.md"
+          - "docs/**"
+          - "LICENSE"
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "package.json"
+          - "package-lock.json"
+
+build:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "next.config.*"
+          - "tailwind.config.*"
+          - "tsconfig.*"
+          - "Dockerfile"
+          - "Dockerfile.*"
+          - "docker-compose*.yml"
+          - ".dockerignore"
+
+security:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "SECURITY.md"
+          - ".github/workflows/codeql.yml"
+          - ".github/workflows/scorecard.yml"
+          - ".github/workflows/trivy.yml"
