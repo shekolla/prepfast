@@ -8,6 +8,7 @@ export default defineConfig({
       provider: 'v8',
       include: ['content/**/*.ts'],
       exclude: ['content/**/*.d.ts', 'content/**/data.ts'],
+      reporter: ['html', 'lcov'],
     },
   },
   resolve: {
