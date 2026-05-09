@@ -3,6 +3,7 @@
 [![CI](https://github.com/shekolla/prepfast/actions/workflows/ci.yml/badge.svg)](https://github.com/shekolla/prepfast/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/shekolla/prepfast/actions/workflows/codeql.yml/badge.svg)](https://github.com/shekolla/prepfast/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/shekolla/prepfast/badge)](https://scorecard.dev/viewer/?uri=github.com/shekolla/prepfast)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/12795/badge)](https://www.bestpractices.dev/projects/12795)
 [![codecov](https://codecov.io/gh/shekolla/prepfast/branch/main/graph/badge.svg)](https://codecov.io/gh/shekolla/prepfast)
 [![Container](https://img.shields.io/badge/ghcr.io-prepfast-blue?logo=docker)](https://github.com/shekolla/prepfast/pkgs/container/prepfast)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
